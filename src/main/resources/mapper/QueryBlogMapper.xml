@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiyu.mapper.QueryBlogMapper">
+
+
+    <sql id="Base_Column_List">
+        blog
+        .
+        id
+        as bid,title,description,content,create_time,update_time,type_id,views,recommend,
+        share_statement,commentabled,flag,published,
+        type.id as tid,type.name
+    </sql>
+
+    <resultMap id="queryBlogMap" type="com.weiyu.entity.QueryBlog">
+        <id column="bid" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="description" property="description"></result>
+        <result column="content" property="content"></result>
+        <result column="create_time" property="createTime" javaType="java.util.Date"></result>
+        <result column="update_time" property="updateTime" javaType="java.util.Date"></result>
+        <result column="views" property="views"></result>
+        <result column="recommend" property="recommend"></result>
+        <result column="share_statement" property="shareStatement"></result>
+        <result column="commentabled" property="commentabled"></result>
+        <result column="flag" property="flag"></result>
+        <result column="published" property="published"></result>
+        <result column="user_id" property="userId"></result>
+
+        <!--封装type对象-->
+        <association property="type" javaType="com.weiyu.entity.Type">
+            <result column="tid" property="id"></result>
+            <result column="name" property="name"></result>
+            <result column="number" property="number"></result>
+        </association>
+
+
+    </resultMap>
+
+    <resultMap id="commentMap" type="com.weiyu.entity.Comment">
+        <id column="id" property="id"></id>
+        <result column="nickname" property="nickname"></result>
+        <result column="email" property="email"></result>
+        <result column="blog_id" property="blogId"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="content" property="content"></result>
+        <result column="parent_id" property="parentId"></result>
+        <result column="parent_comment" property="parentComment"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler"></result>
+        <result column="avatar" property="avatar"></result>
+        <collection property="replyComments" ofType="com.weiyu.entity.Comment">
+            <id column="id" property="id"></id>
+            <result column="nickname" property="nickname"></result>
+            <result column="email" property="email"></result>
+            <result column="blog_id" property="blogId"></result>
+            <result column="create_time" property="createTime"></result>
+            <result column="content" property="content"></result>
+            <result column="parent_id" property="parentId"></result>
+            <result column="parent_comment" property="parentComment"
+                    typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler"></result>
+            <result column="avatar" property="avatar"></result>
+            <collection column="reply_comments" property="replyComments" resultMap="commentMap"></collection>
+        </collection>
+    </resultMap>
+
+    <select id="findAllByOrder" parameterType="com.weiyu.entity.Blog" resultMap="queryBlogMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM blog,
+        type
+        WHERE blog.type_id = type.id
+        <if test="typeId != null">
+            and blog.type_id = #{typeId}
+        </if>
+        <if test="title != null">
+            and blog.title like "%"#{title}"%"
+        </if>
+        <if test="recommend != null">
+            and blog.recommend=#{recommend}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findRecommendByOrder" resultMap="queryBlogMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM blog,
+        type
+        WHERE blog.type_id = type.id and published=true and recommend=true
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findPublishedByOrder" parameterType="com.weiyu.entity.Blog" resultMap="queryBlogMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM blog,
+        type
+        WHERE blog.type_id = type.id and published=true
+        <if test="typeId != null">
+            and blog.type_id = #{typeId}
+        </if>
+        <if test="title != null">
+            and blog.title like "%"#{title}"%"
+        </if>
+        <if test="recommend != null">
+            and blog.recommend=#{recommend}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findByQuery" parameterType="java.lang.String" resultMap="queryBlogMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM blog,
+        type
+        WHERE published=true and blog.type_id = type.id and (title like "%"#{query}"%" or content like "%"#{query}"%"
+        or description like "%"#{query}"%")
+        ORDER BY create_time DESC
+    </select>
+    <select id="findOneById" parameterType="java.lang.Long" resultMap="queryBlogMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from blog,type
+        where blog.type_id = type.id and published=true and blog.id = #{id}
+    </select>
+    <select id="findByTagId" parameterType="java.lang.Long" resultMap="queryBlogMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM blog,type
+        WHERE blog.id IN (SELECT blog_id FROM blog_tags WHERE tag_id = #{tagId}) and blog.type_id = type.id
+    </select>
+    <select id="getTagsOfBlog" resultType="com.weiyu.entity.Tag">
+        SELECT tag.*
+        FROM tag,
+             blog_tags
+        WHERE tag_id = tag.id
+          AND blog_id = #{blogId}
+    </select>
+</mapper>
+

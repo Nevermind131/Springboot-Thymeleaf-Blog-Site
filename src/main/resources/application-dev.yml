@@ -1,0 +1,52 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql:///myblog?serverTimezone=GMT
+      username: root
+      password: root
+  #设置不参与热部署的文件或文件夹
+  devtools:
+    restart:
+      exclude: static/**,config/application.yml
+      enabled: true
+
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+logging:
+  level:
+    root: info
+    com.weiyu: debug
+  file:
+    name: log/server-dev.log
+
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+
+
+#  mvc:
+#    # 该语句说明了静态资源满足什么样的匹配条件,springboot才会处理静态资源请求
+#    # 该语句用来阐述http请求
+#    static-path-pattern: /static/**
+#  servlet:
+#    # 文件存放的物理地址
+#    multipart:
+#      location: /Users/lenovo/IdeaProjects/myblog/target/blog_img/
+#  # 该语句规定应该在何处查找静态资源,springboot在查找静态资源时会依次在下面的配置路径中查找
+#  # 该语句用来描述静态资源的存放位置
+#  resources:
+#    static-locations: classpath:static/,file:${spring.servlet.multipart.location}

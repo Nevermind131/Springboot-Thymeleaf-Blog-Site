@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiyu.mapper.TagMapper">
+    <update id="updateNumber" parameterType="com.weiyu.entity.Tag">
+        UPDATE tag
+        SET number = (SELECT COUNT(*) FROM blog_tags WHERE tag_id = #{id})
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findAllByOrder" resultType="com.weiyu.entity.Tag">
+        select id, name, number
+        from tag
+        order by id desc
+    </select>
+
+    <select id="joinQuery" parameterType="com.weiyu.entity.Blog" resultType="com.weiyu.entity.Tag">
+        select tag.id, name, number
+        from tag,
+             blog_tags
+        where tag.id = tag_id
+          and blog_id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,33 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://120.78.222.96:3306/myblog?serverTimezone=Asia/Shanghai
+      username: root
+      password: hello1504813
+  redis:
+    host: 120.78.222.96
+    password: GEN1827880yu@@
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+  global-config:
+    db-config:
+      id-type: auto
+
+
+logging:
+  level:
+    root: info
+    com.weiyu: debug
+  file:
+    name: /serverLog/server-pro.log

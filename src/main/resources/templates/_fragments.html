@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <!--移动端设置-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">博客详情页</title>
+    <link rel="stylesheet" href="../static/Semantic-UI-CSS-master/semantic.min.css" th:href="@{/Semantic-UI-CSS-master/semantic.min.css}">
+    <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
+    <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
+    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css"  th:href="@{/lib/tocbot/tocbot.css}">
+    <link rel="stylesheet" href="../static/css/my.css"   th:href="@{/css/my.css}">
+</head>
+<body>
+
+<!--导航-->
+<nav th:fragment="menu(n)" class="ui inverted attached segment m-shadow-small" >
+    <div class="ui container">
+        <div class="ui stackable menu inverted secondary">
+            <h1 class="ui header teal item">盐鱼律己</h1>
+            <a href="#" class="m-item item m-mobile-hide" th:href="@{/}" th:classappend="${n==1} ? 'active'"><i class="home icon"></i>首页</a>
+            <a href="#" class="m-item item m-mobile-hide" th:href="@{/types/-1}" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide" th:href="@{/tags/-1}" th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>标签</a>
+            <a href="#" class="m-item item m-mobile-hide" th:href="@{/archives/1}" th:classappend="${n==4} ? 'active'"><i class="clone icon"></i>归档</a>
+            <a href="#" class="m-item item m-mobile-hide" th:href="@{/about}" th:classappend="${n==5} ? 'active'"><i class="info icon"></i>关于我</a>
+            <a href="https://blog.csdn.net/qq_27181375?spm=1000.2115.3001.5343" target="_blank" class="m-item item m-mobile-hide" ><i class="sign out alternate icon"></i>CSDN</a>
+            <div class="m-item right item m-mobile-hide">
+                <form name="search" action="#" th:action="@{/search}" method="post">
+                    <div class="ui input icon">
+                        <input name="query" type="text" placeholder="Search......" th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search icon link"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--汉堡按钮-->
+    <a href="#" class="menu ui toggle black icon button m-right-mid m-mobile-show">
+        <i class=" sidebar icon"></i>
+    </a>
+</nav>
+
+<!--底部-->
+<footer th:fragment="footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui container center aligned"><!--container容器-->
+        <div class="ui stackable grid divided inverted"><!--grid相当于bootstrap的行(row)-->
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../static/img/my_wechat.png" th:src="@{/img/my_wechat.png}" class="ui rounded image" style="width:110px" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header  m-opacity-mini">最新博客</h4>
+                <div id="newblog-container">
+                    <div class="ui inverted link list" th:fragment="newblogList">
+                        <a href="" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="item" th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事</a>
+                       <!--/*-->
+                        <a href="" class="item">用户故事</a>
+                        <a href="" class="item">用户故事</a>
+                        <!--*/-->
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header  m-opacity-mini">联系我</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">Email:<span th:text="#{index.email}">1286115446@qq.com</span></p>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">QQ:<span th:text="#{index.qq}">1286115446</span></p>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header  m-opacity-mini">Blog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客,会分享我的学习历程的相关内容，希望可以帮助到来到这的所有人...</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 盐鱼律己 Designed by WeiYu</p>
+	<div class="ui inverted link list">
+        <a target="_blank" href="http://beian.miit.gov.cn/" class="item">桂ICP备2022001791号</a>
+        <div style="width:300px;margin:0 auto; padding:20px 0;">
+            <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=45031102000029" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="../static/img/beian.png" th:src="@{/img/beian.png}" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">桂公网安备 45031102000029号</p></a>
+        </div>
+    </div>
+
+    </div>
+
+</footer>
+
+<th:block th:fragment="script">
+    <script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script src="../static/Semantic-UI-CSS-master/semantic.min.js" th:src="@{/Semantic-UI-CSS-master/semantic.min.js}"></script>
+    <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+    <script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+    <script src="../static/js/jquery.scrollTo.min.js" th:src="@{/js/jquery.scrollTo.min.js}"></script>
+    <script src="../static/lib/waypoints/jquery.waypoints.min.js"  th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
+
+    <script>
+        $("#newblog-container").load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
+
+        function clickEffect() {
+            let balls = [];
+
+            let longPressed = false;
+
+            let longPress;
+
+            let multiplier = 0;
+
+            let width, height;
+
+            let origin;
+
+            let normal;
+
+            let ctx;
+
+            const colours = ["#F73859", "#14FFEC", "#00E0FF", "#FF99FE", "#FAF15D"];
+
+            const canvas = document.createElement("canvas");
+
+            document.body.appendChild(canvas);
+
+            canvas.setAttribute("style", "width: 100%; height: 100%; top: 0; left: 0; z-index: 99999; position: fixed; pointer-events: none;");
+
+            const pointer = document.createElement("span");
+
+            pointer.classList.add("pointer");
+
+            document.body.appendChild(pointer);
+
+            if (canvas.getContext && window.addEventListener) {
+                ctx = canvas.getContext("2d");
+
+                updateSize();
+
+                window.addEventListener('resize', updateSize, false);
+
+                loop();
+
+                window.addEventListener("mousedown", function (e) {
+                    pushBalls(randBetween(10, 20), e.clientX, e.clientY);
+
+                    document.body.classList.add("is-pressed");
+
+                    longPress = setTimeout(function () {
+                        document.body.classList.add("is-longpress");
+
+                        longPressed = true;
+
+                    }, 500);
+
+                }, false);
+
+                window.addEventListener("mouseup", function (e) {
+                    clearInterval(longPress);
+
+                    if (longPressed == true) {
+                        document.body.classList.remove("is-longpress");
+
+                        pushBalls(randBetween(50 + Math.ceil(multiplier), 100 + Math.ceil(multiplier)), e.clientX, e.clientY);
+
+                        longPressed = false;
+
+                    }
+
+                    document.body.classList.remove("is-pressed");
+
+                }, false);
+
+                window.addEventListener("mousemove", function (e) {
+                    let x = e.clientX;
+
+                    let y = e.clientY;
+
+                    pointer.style.top = y + "px";
+
+                    pointer.style.left = x + "px";
+
+                }, false);
+
+            } else {
+                console.log("canvas or addEventListener is unsupported!");
+
+            }
+
+            function updateSize() {
+                canvas.width = window.innerWidth * 2;
+
+                canvas.height = window.innerHeight * 2;
+
+                canvas.style.width = window.innerWidth + 'px';
+
+                canvas.style.height = window.innerHeight + 'px';
+
+                ctx.scale(2, 2);
+
+                width = (canvas.width = window.innerWidth);
+
+                height = (canvas.height = window.innerHeight);
+
+                origin = {x: width / 2, y: height / 2};
+
+                normal = {x: width / 2, y: height / 2};
+
+            }
+
+            class Ball {
+                constructor(x = origin.x, y = origin.y) {
+                    this.x = x;
+
+                    this.y = y;
+
+                    this.angle = Math.PI * 2 * Math.random();
+
+                    if (longPressed == true) {
+                        this.multiplier = randBetween(14 + multiplier, 15 + multiplier);
+
+                    } else {
+                        this.multiplier = randBetween(6, 12);
+
+                    }
+
+                    this.vx = (this.multiplier + Math.random() * 0.5) * Math.cos(this.angle);
+
+                    this.vy = (this.multiplier + Math.random() * 0.5) * Math.sin(this.angle);
+
+                    this.r = randBetween(8, 12) + 3 * Math.random();
+
+                    this.color = colours[Math.floor(Math.random() * colours.length)];
+
+                }
+
+                update() {
+                    this.x += this.vx - normal.x;
+
+                    this.y += this.vy - normal.y;
+
+                    normal.x = -2 / window.innerWidth * Math.sin(this.angle);
+
+                    normal.y = -2 / window.innerHeight * Math.cos(this.angle);
+
+                    this.r -= 0.3;
+
+                    this.vx *= 0.9;
+
+                    this.vy *= 0.9;
+
+                }
+
+            }
+
+            function pushBalls(count = 1, x = origin.x, y = origin.y) {
+                for (let i = 0; i < count; i++) {
+                    balls.push(new Ball(x, y));
+
+                }
+
+            }
+
+            function randBetween(min, max) {
+                return Math.floor(Math.random() * max) + min;
+
+            }
+
+            function loop() {
+                ctx.fillStyle = "rgba(255, 255, 255, 0)";
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < balls.length; i++) {
+                    let b = balls[i];
+
+                    if (b.r < 0) continue;
+
+                    ctx.fillStyle = b.color;
+
+                    ctx.beginPath();
+
+                    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2, false);
+
+                    ctx.fill();
+
+                    b.update();
+
+                }
+
+                if (longPressed == true) {
+                    multiplier += 0.2;
+
+                } else if (!longPressed && multiplier >= 0) {
+                    multiplier -= 0.4;
+
+                }
+
+                removeBall();
+
+                requestAnimationFrame(loop);
+
+            }
+
+            function removeBall() {
+                for (let i = 0; i < balls.length; i++) {
+                    let b = balls[i];
+
+                    if (b.x + b.r < 0 || b.x - b.r > width || b.y + b.r < 0 || b.y - b.r > height || b.r < 0) {
+                        balls.splice(i, 1);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        clickEffect();
+    </script>
+</th:block>
+</body>
+</html>

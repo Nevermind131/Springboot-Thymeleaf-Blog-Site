@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: pro
+
+comment.avatar: /img/avatar_comment.png
+
+
+#首页列表的数据条数
+pageSize:
+  type: 6
+  tag: 10
+  blog: 6
+  recommend: 6
+  search: 5
+
+#type页面
+showTypes:
+  pageSize: 5
+#tag页面
+showTags:
+  pageSize: 5
+#归档页面
+showArchives:
+  pageSize: 6

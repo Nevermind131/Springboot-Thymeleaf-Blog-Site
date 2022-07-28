@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiyu.mapper.TypeMapper">
+    <update id="updateNumber" parameterType="com.weiyu.entity.Type">
+        UPDATE type
+        SET number = (SELECT COUNT(*) FROM blog WHERE type_id = #{id})
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findAllByOrder" resultType="com.weiyu.entity.Type">
+        select id, name, number
+        from type
+        order by id desc
+    </select>
+</mapper>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiyu.mapper.BlogMapper">
+
+    <insert id="insertSelective" parameterType="com.weiyu.entity.Blog">
+        insert into blog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="typeId != null">
+                type_id,
+            </if>
+            <if test="views != null">
+                views,
+            </if>
+            <if test="recommend != null">
+                recommend,
+            </if>
+            <if test="shareStatement != null">
+                share_statement,
+            </if>
+            <if test="commentabled != null">
+                commentabled,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="published != null">
+                published,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="description != null">
+                #{description},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="typeId != null">
+                #{typeId},
+            </if>
+            <if test="views != null">
+                #{views},
+            </if>
+            <if test="recommend != null">
+                #{recommend},
+            </if>
+            <if test="shareStatement != null">
+                #{shareStatement},
+            </if>
+            <if test="commentabled != null">
+                #{commentabled},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="published != null">
+                #{published},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+        </trim>
+    </insert>
+
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.weiyu.entity.Blog">
+        update blog
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="typeId != null">
+                type_id = #{typeId},
+            </if>
+            <if test="views != null">
+                views = #{views},
+            </if>
+            <if test="recommend != null">
+                recommend = #{recommend},
+            </if>
+            <if test="shareStatement != null">
+                share_statement = #{shareStatement},
+            </if>
+            <if test="commentabled != null">
+                commentabled = #{commentabled},
+            </if>
+            <if test="flag != null">
+                flag = #{flag},
+            </if>
+            <if test="published != null">
+                published = #{published},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="getGroupYear" resultType="java.lang.String">
+        SELECT DATE_FORMAT(blog.create_time,'%Y') AS YEAR FROM blog GROUP BY YEAR ORDER BY YEAR DESC
+    </select>
+    <select id="getByYear" parameterType="java.lang.String" resultType="com.weiyu.entity.Blog">
+        SELECT * FROM blog WHERE published=true and DATE_FORMAT(create_time,'%Y') = #{year} order by create_time desc
+    </select>
+    <select id="getLast" resultType="com.weiyu.entity.Blog">
+        SELECT * FROM blog WHERE published=true and create_time > #{createTime} ORDER BY create_time ASC LIMIT 0,1
+    </select>
+    <select id="getNext" resultType="com.weiyu.entity.Blog">
+        SELECT * FROM blog WHERE published=true and create_time &lt; #{createTime} ORDER BY create_time DESC LIMIT 0,1
+    </select>
+</mapper>
