@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: pro
+    active: pro #生产环境
 
 comment.avatar: /img/avatar_comment.png
 
