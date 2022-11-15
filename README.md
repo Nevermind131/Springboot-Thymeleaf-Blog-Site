@@ -16,7 +16,7 @@
 
 ![输入图片说明](https://foruda.gitee.com/images/1668485911057960301/95576ab4_10028774.png "3.png")
 
-![输入图片说明](4.png)
+![输入图片说明]![4](https://user-images.githubusercontent.com/84068912/201826809-d94dd2d2-21be-47a2-b86c-91dd44b43da2.png)
 
 ##### 后台
 
